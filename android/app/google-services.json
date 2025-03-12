@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "251618113476",
+    "project_id": "tutorial-64f6e",
+    "storage_bucket": "tutorial-64f6e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251618113476:android:ebfef1de2256eb90e09691",
+        "android_client_info": {
+          "package_name": "com.example.firebase_tutorial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzBr-yn-1fDXMhJLnwyKCO4ZNXCFhcFC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
