@@ -1,3 +1,5 @@
+import 'package:firebase_tutorial/firebase_service/firebase_authentication.dart';
+import 'package:firebase_tutorial/screen/home_page.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -11,10 +13,12 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isLogin = true;
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuthentication _auth = FirebaseAuthentication();
 
   void toggleForm() {
     setState(() {
@@ -22,9 +26,36 @@ class _AuthScreenState extends State<AuthScreen> {
     });
   }
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Form is valid, proceed with authentication
+  void _submitForm() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final String email = emailController.text.trim();
+    final String password = passwordController.text;
+
+    Map<String, dynamic> result;
+
+    if (isLogin) {
+      result = await _auth.signIn(email, password);
+    } else {
+      result = await _auth.signUp(email, password);
+    }
+
+    if (result['success']) {
+      // Clear fields after successful authentication
+      emailController.clear();
+      passwordController.clear();
+      confirmPasswordController.clear();
+
+      // Navigate to HomePage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage(userID: result['uid'])),
+      );
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message']), backgroundColor: Colors.red),
+      );
     }
   }
 
@@ -44,9 +75,7 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               elevation: 10,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -64,56 +93,41 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      // Email Field
                       TextFormField(
                         controller: emailController,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white60),
                         decoration: InputDecoration(
                           labelText: 'Email',
-                          labelStyle: const TextStyle(color: Colors.white70),
-                          prefixIcon: const Icon(Icons.email, color: Colors.white),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                          prefixIcon: const Icon(Icons.email, color: Colors.deepPurple),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                         ),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          } else if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+').hasMatch(value)) {
+                          if (value == null || value.isEmpty) return 'Enter your email';
+                          if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+').hasMatch(value)) {
                             return 'Enter a valid email';
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 10),
+                      // Password Field
                       TextFormField(
                         controller: passwordController,
-                        style: const TextStyle(color: Colors.white),
                         obscureText: !isPasswordVisible,
+                        style: const TextStyle(color: Colors.white60),
                         decoration: InputDecoration(
                           labelText: 'Password',
-                          labelStyle: const TextStyle(color: Colors.white70),
-                          prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                          prefixIcon: const Icon(Icons.lock, color: Colors.deepPurple),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                           suffixIcon: IconButton(
-                            icon: Icon(
-                              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isPasswordVisible = !isPasswordVisible;
-                              });
-                            },
+                            icon: Icon(isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                            onPressed: () => setState(() => isPasswordVisible = !isPasswordVisible),
                           ),
                         ),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          } else if (value.length < 6) {
-                            return 'Password must be at least 6 characters';
-                          }
+                          if (value == null || value.isEmpty) return 'Enter your password';
+                          if (value.length < 6) return 'Password must be at least 6 characters';
                           return null;
                         },
                       ),
@@ -122,25 +136,17 @@ class _AuthScreenState extends State<AuthScreen> {
                           padding: const EdgeInsets.only(top: 10),
                           child: TextFormField(
                             controller: confirmPasswordController,
-                            style: const TextStyle(color: Colors.white),
                             obscureText: !isConfirmPasswordVisible,
+                            style: const TextStyle(color: Colors.white60),
                             decoration: InputDecoration(
                               labelText: 'Confirm Password',
-                              labelStyle: const TextStyle(color: Colors.white70),
-                              prefixIcon: const Icon(Icons.lock_outline, color: Colors.white),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
+                              prefixIcon: const Icon(Icons.lock_outline, color: Colors.deepPurple),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                  color: Colors.white,
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    isConfirmPasswordVisible = !isConfirmPasswordVisible;
-                                  });
-                                },
+                                onPressed: () => setState(() => isConfirmPasswordVisible = !isConfirmPasswordVisible),
                               ),
                             ),
                             validator: (value) {
@@ -152,24 +158,17 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                       const SizedBox(height: 20),
+                      // Submit Button
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepPurple,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 15),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                         ),
-                        onPressed:(){
-                          _formKey.currentState!.reset();
-                          _submitForm();
-                        },
-                        child: Text(
-                          isLogin ? 'Login' : 'Sign Up',
-                          style: const TextStyle(fontSize: 18),
-                        ),
+                        onPressed: _submitForm,
+                        child: Text(isLogin ? 'Login' : 'Sign Up', style: const TextStyle(fontSize: 18)),
                       ),
+                      // Toggle Login/Signup
                       TextButton(
                         onPressed: toggleForm,
                         child: Text(
