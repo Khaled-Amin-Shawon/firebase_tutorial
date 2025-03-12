@@ -157,9 +157,8 @@ Now that Firebase is successfully integrated, I plan to implement **Firebase Aut
 
 ---
 # Devlog: Authentication System in Flutter
-
-## **Phase 1: Project Initialization**
-### **Date:** 13 March , 2025
+## **Date:** 13 March , 2025
+## **Step 1: Project Initialization**
 ### **Tasks:**
 - Set up a new Flutter project.
 - Integrated Firebase into the Flutter project.
@@ -176,8 +175,7 @@ Now that Firebase is successfully integrated, I plan to implement **Firebase Aut
 
 ---
 
-## **Phase 2: Creating Authentication Service**
-### **Date:** [Insert Date]
+## **Step 2: Creating Authentication Service**
 ### **Tasks:**
 - Created `firebase_authentication.dart` to handle Firebase authentication.
 - Implemented methods for:
@@ -235,8 +233,7 @@ class FirebaseAuthentication {
 
 ---
 
-## **Phase 3: Designing Authentication UI**
-### **Date:** [Insert Date]
+## **Step 3: Designing Authentication UI**
 ### **Tasks:**
 - Created `AuthScreen.dart` with:
   - Email & password input fields.
@@ -256,8 +253,7 @@ class FirebaseAuthentication {
 
 ---
 
-## **Phase 4: Implementing Authentication Logic**
-### **Date:** [Insert Date]
+## **Step 4: Implementing Authentication Logic**
 ### **Tasks:**
 - Connected `AuthScreen.dart` to `firebase_authentication.dart`.
 - Implemented `_submitForm()` to handle authentication based on login/signup state.
@@ -272,8 +268,7 @@ class FirebaseAuthentication {
 
 ---
 
-## **Phase 5: Testing and Debugging**
-### **Date:** [Insert Date]
+## **Step 5: Testing and Debugging**
 ### **Tasks:**
 - Conducted unit tests for `signIn` and `signUp` methods.
 - Tested UI responsiveness and form validation.
