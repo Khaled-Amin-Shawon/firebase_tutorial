@@ -156,10 +156,14 @@ I was happy to see that Firebase was successfully integrated, and my Flutter app
 Now that Firebase is successfully integrated, I plan to implement **Firebase Authentication** and **Firestore** in the app to allow user login and store data.
 
 ---
-# Devlog: Authentication System in Flutter
-## **Date:** 13 March , 2025
-## **Step 1: Project Initialization**
-### **Tasks:**
+
+### **Devlog: Authentication System in Flutter**
+
+**Date**: March 13, 2025
+
+### **Step 1: Project Initialization**
+
+#### **Tasks**:
 - Set up a new Flutter project.
 - Integrated Firebase into the Flutter project.
 - Configured Firebase Authentication.
@@ -168,15 +172,16 @@ Now that Firebase is successfully integrated, I plan to implement **Firebase Aut
   - `firebase_core`
   - `firebase_auth`
 
-### **Challenges & Solutions:**
-- **Issue:** Firebase connection was not initializing correctly.
-  - **Solution:** Ensured `google-services.json` (for Android) and `GoogleService-Info.plist` (for iOS) were correctly placed in the project.
+#### **Challenges & Solutions**:
+- **Issue**: Firebase connection was not initializing correctly.
+  - **Solution**: Ensured `google-services.json` (for Android) and `GoogleService-Info.plist` (for iOS) were correctly placed in the project.
   - Checked and implemented `Firebase.initializeApp();` before using authentication services.
 
 ---
 
-## **Step 2: Creating Authentication Service**
-### **Tasks:**
+### **Step 2: Creating Authentication Service**
+
+#### **Tasks**:
 - Created `firebase_authentication.dart` to handle Firebase authentication.
 - Implemented methods for:
   - User registration (`signUp`)
@@ -184,7 +189,7 @@ Now that Firebase is successfully integrated, I plan to implement **Firebase Aut
   - User logout (`signOut`)
 - Structured authentication responses to return success status and error messages.
 
-### **Authentication Code:**
+#### **Authentication Code**:
 ```dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -225,16 +230,17 @@ class FirebaseAuthentication {
 }
 ```
 
-### **Challenges & Solutions:**
-- **Issue:** Authentication errors were not being properly handled.
-  - **Solution:** Implemented structured responses using a `Map<String, dynamic>` format to return both `success` and `message` fields.
-- **Issue:** Firebase authentication was not working after app restart.
-  - **Solution:** Implemented `FirebaseAuth.instance.currentUser` to check the logged-in state.
+#### **Challenges & Solutions**:
+- **Issue**: Authentication errors were not being properly handled.
+  - **Solution**: Implemented structured responses using a `Map<String, dynamic>` format to return both `success` and `message` fields.
+- **Issue**: Firebase authentication was not working after app restart.
+  - **Solution**: Implemented `FirebaseAuth.instance.currentUser` to check the logged-in state.
 
 ---
 
-## **Step 3: Designing Authentication UI**
-### **Tasks:**
+### **Step 3: Designing Authentication UI**
+
+#### **Tasks**:
 - Created `AuthScreen.dart` with:
   - Email & password input fields.
   - Login and Sign Up toggle.
@@ -245,45 +251,47 @@ class FirebaseAuthentication {
   - Rounded input fields.
   - Visibility toggle for password fields.
 
-### **Challenges & Solutions:**
-- **Issue:** UI was not updating after switching between Login and Sign Up.
-  - **Solution:** Used `setState()` to manage UI state changes.
-- **Issue:** Password fields were always hidden.
-  - **Solution:** Added a visibility toggle button with `obscureText` and `IconButton`.
+#### **Challenges & Solutions**:
+- **Issue**: UI was not updating after switching between Login and Sign Up.
+  - **Solution**: Used `setState()` to manage UI state changes.
+- **Issue**: Password fields were always hidden.
+  - **Solution**: Added a visibility toggle button with `obscureText` and `IconButton`.
 
 ---
 
-## **Step 4: Implementing Authentication Logic**
-### **Tasks:**
+### **Step 4: Implementing Authentication Logic**
+
+#### **Tasks**:
 - Connected `AuthScreen.dart` to `firebase_authentication.dart`.
 - Implemented `_submitForm()` to handle authentication based on login/signup state.
 - Displayed authentication errors using `ScaffoldMessenger` and `SnackBar`.
 - Navigated to `HomePage` upon successful login/signup.
 
-### **Challenges & Solutions:**
-- **Issue:** Navigation was happening even when authentication failed.
-  - **Solution:** Checked authentication response before calling `Navigator.pushReplacement`.
-- **Issue:** User credentials were not being cleared after authentication.
-  - **Solution:** Called `emailController.clear();` and `passwordController.clear();` after successful authentication.
+#### **Challenges & Solutions**:
+- **Issue**: Navigation was happening even when authentication failed.
+  - **Solution**: Checked authentication response before calling `Navigator.pushReplacement`.
+- **Issue**: User credentials were not being cleared after authentication.
+  - **Solution**: Called `emailController.clear();` and `passwordController.clear();` after successful authentication.
 
 ---
 
-## **Step 5: Testing and Debugging**
-### **Tasks:**
+### **Step 5: Testing and Debugging**
+
+#### **Tasks**:
 - Conducted unit tests for `signIn` and `signUp` methods.
 - Tested UI responsiveness and form validation.
 - Debugged Firebase errors and ensured smooth authentication flow.
 - Verified session persistence using `FirebaseAuth.instance.currentUser`.
 
-### **Challenges & Solutions:**
-- **Issue:** Invalid emails were being accepted.
-  - **Solution:** Used regex validation for email format.
-- **Issue:** Users were logged out after app restart.
-  - **Solution:** Implemented session persistence by checking `FirebaseAuth.instance.currentUser` at app start.
+#### **Challenges & Solutions**:
+- **Issue**: Invalid emails were being accepted.
+  - **Solution**: Used regex validation for email format.
+- **Issue**: Users were logged out after app restart.
+  - **Solution**: Implemented session persistence by checking `FirebaseAuth.instance.currentUser` at app start.
 
 ---
 
-## **Future Improvements**
+### **Future Improvements**
 - Implement Google and Facebook authentication.
 - Implement password reset functionality.
 - Improve error messages for better user experience.
@@ -291,6 +299,6 @@ class FirebaseAuthentication {
 
 ---
 
-## **Conclusion**
+### **Conclusion**
 The authentication system is now fully functional with Firebase. The system ensures secure login/signup, proper error handling, and user-friendly UI. Further improvements will be made based on user feedback and additional security enhancements.
 
