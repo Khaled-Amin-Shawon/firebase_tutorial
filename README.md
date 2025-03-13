@@ -302,3 +302,55 @@ class FirebaseAuthentication {
 ### **Conclusion**
 The authentication system is now fully functional with Firebase. The system ensures secure login/signup, proper error handling, and user-friendly UI. Further improvements will be made based on user feedback and additional security enhancements.
 
+---
+# **Reset Password with DevLog**
+```dart
+void devLog(String message, {String tag = 'DEVLOG'}) {
+  debugPrint('[$tag] $message');
+}
+
+Future<Map<String, dynamic>> resetPassword(String email) async {
+  try {
+    await _auth.sendPasswordResetEmail(email: email);
+
+    // ✅ Dev Log for Success
+    devLog('Password reset email sent to: $email', tag: 'RESET PASSWORD');
+
+    return {
+      'success': true,
+      'message': 'Password reset email sent. Check your inbox.'
+    };
+  } on FirebaseAuthException catch (e) {
+    // ✅ Dev Log for FirebaseAuthException
+    devLog('FirebaseAuthException - Code: ${e.code}, Message: ${e.message}', tag: 'RESET PASSWORD ERROR');
+
+    return {
+      'success': false,
+      'message': _handleAuthException(e)
+    };
+  } catch (e, stackTrace) {
+    // ✅ Dev Log for Unexpected Errors
+    devLog('Unexpected error: $e\nStackTrace: $stackTrace', tag: 'RESET PASSWORD ERROR');
+
+    return {
+      'success': false,
+      'message': 'Something went wrong. Please try again.'
+    };
+  }
+}
+```
+
+---
+
+### **Why This is Better?**
+✅ **Creates a reusable `devLog` function** → Consistent debug logs throughout the project.  
+✅ **Uses tags (`tag` parameter)** → Easier to filter logs (e.g., "RESET PASSWORD ERROR").  
+✅ **Logs all necessary details** → Error codes, messages, and stack traces.  
+
+Now, whenever an error occurs, you'll get logs like this in **Debug Console**:
+
+```
+[RESET PASSWORD] Password reset email sent to: user@example.com
+[RESET PASSWORD ERROR] FirebaseAuthException - Code: user-not-found, Message: No user found with this email.
+[RESET PASSWORD ERROR] Unexpected error: Some error message
+```
