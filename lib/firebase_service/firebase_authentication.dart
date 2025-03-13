@@ -78,4 +78,15 @@ class FirebaseAuthentication {
         return 'Authentication error: ${e.message}';
     }
   }
+  // reset password by firebase authentication
+  Future<Map<String, dynamic>> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return {'success': true, 'message': 'Password reset email sent. check your email'};
+    } on FirebaseAuthException catch (e) {
+      return {'success': false, 'message': _handleAuthException(e)};
+    } catch (e) {
+      return {'success': false, 'message': 'An unexpected error occurred: $e'};
+    }
+  }
 }
